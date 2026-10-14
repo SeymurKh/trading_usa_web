@@ -43,3 +43,25 @@
 - `npm.cmd run build` — production-сборка успешно завершена.
 - Сборка сформирована в каталоге `dist/`.
 - Dev-сервер проверен на маршрутах `/ru/`, `/en/services`, `/az/service/vehicles` и `/ru/contact` — все вернули HTTP 200.
+
+## 2026-10-14
+
+### Задание: шрифт Merriweather, типографика, бегущая строка на главной
+
+- Установлен шрифт **Merriweather** (вариативный, SIL OFL): из пакета `take/` (144 файла, ~158 МБ) отобраны 2 вариативных TTF + лицензия `OFL.txt`, выполнены instancing (ось wdth зафиксирована на 100) и сабсет (Latin + Latin Ext + Cyrillic + азербайджанские символы) с конвертацией в woff2. Итог в `src/fonts/`: `Merriweather-Variable.woff2` (466 КБ), `Merriweather-Italic-Variable.woff2` (472 КБ), `OFL.txt`. Папка `take/` удалена полностью.
+- Покрытие глифов проверено по cmap: кириллица и символы ə/Ə/ö/ş/ç/ğ/ı/ü присутствуют — RU/AZ локали работают корректно.
+- Удалён импорт Google Fonts (Manrope / DM Mono). DM Mono заменён на Merriweather для микро-подписей (капс + letter-spacing).
+- Введена типографическая шкала (micro 0.75 / small 0.9375 / body 1.0625 / lead 1.2 / h3 1.375 / h2 clamp 2.125–3.5 / h1 clamp 2.75–5.25 rem), letter-spacing заголовков −0.012em, веса 400/500/600/700, единый вертикальный ритм секций 120px (desktop) / 72px (mobile).
+- На главной жёлтый блок статистики (12+ / 24/7 / 98%) заменён **бегущей строкой направлений доставки**: 9 стран СНГ (Азербайджан, Беларусь, Казахстан, Кыргызстан, Молдова, Россия, Таджикистан, Туркменистан, Узбекистан; Армения исключена по требованию) + лейбл «Доставка из США через Грузию». Данные `marqueeLabel` / `marqueeCountries` в `data.js` для ru/en/az. Бесшовная CSS-анимация, пауза при наведении, поддержка `prefers-reduced-motion`.
+- Зачистка мёртвого кода: удалены `copy.*.stats`, `form.route`, `gallery[].category`, лишние пропсы (`locale`/`navigate`) у `AboutPage`/`FaqPage`/`ContactPage`/`GalleryPage`, стили `.stats`/`.stat` и `--mono`; `<details>` в FAQ переведён на неконтролируемый режим.
+- `ServiceCard` переведён с `onClick` на `<article>` на семантическую ссылку `<a href>` (клавиатурная навигация, фокус-стили, middle-click работает).
+- Визуальные улучшения: фиксированная шапка с подложкой при скролле, плавное появление секций при скролле (IntersectionObserver + CSS), hover-микроанимации стрелок и плиток галереи, ротация «+» в FAQ.
+
+### Проверка этапа
+
+- `npm.cmd run build` — успешно; woff2-шрифты включены в сборку (466 + 472 КБ).
+- `vite preview` — маршруты `/`, `/ru/`, `/en/services`, `/az/service/vehicles`, `/ru/contact`, `/en/faq` вернули HTTP 200.
+- Grep-аудит: упоминаний `stats`, `route:`, `category:`, `Manrope`, `DM Mono`, `fonts.googleapis`, `take` в исходниках нет (найденное `route:` — часть фразы «the whole route:» в EN-тексте).
+
+- Добавлен `vercel.json` с SPA-fallback (rewrites в `/index.html`) — прямые заходы/обновление `/ru/service/...` и прочих маршрутов больше не отдают 404 при деплое на Vercel.
+- Пакет переименован: `atlas-forward-logistics` -> `trading-usa-web` (`package.json` + `package-lock.json`).
