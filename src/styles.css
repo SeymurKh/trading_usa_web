@@ -85,7 +85,7 @@ h3 { font-size: var(--fs-h3); font-weight: 600; }
 
 /* Бегущая строка — направления доставки */
 .marquee { background: var(--accent); color: var(--dark); overflow: hidden; padding: 18px 0; }
-.marquee-track { display: flex; width: max-content; animation: marquee-scroll 120s linear infinite; }
+.marquee-track { display: flex; width: max-content; animation: marquee-scroll 240s linear infinite; }
 
 .marquee-group { display: flex; align-items: baseline; white-space: nowrap; }
 .marquee-item { font-size: var(--fs-micro); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; }
