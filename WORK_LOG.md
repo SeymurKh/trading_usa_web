@@ -147,3 +147,45 @@
 - `npm run build` — успешно; в `src/assets/services/` 6 фото, все подключены импортами.
 - Аудит текстов: все 15 фрагментов (5 услуг × RU/EN/AZ) обновлены, старых формулировок не осталось.
 - Smoke-тест маршрутов — HTTP 200.
+
+## 2026-10-28 — смена цветового направления: небесно-голубой акцент
+
+### Что сделано
+
+- **Акцент**: `--accent: #d5f25c` (салатовый) -> `#67C6FF` (небесно-голубой, холодный tech-стиль). Все 13 точек через `var(--accent)` обновились автоматически: кнопка primary, marquee, quote-section, brand-dot, process-no, hero-scroll, form-success, hover nav/footer/back-link, focus-visible.
+- **Hover акцента**: `.button.primary:hover` `#e6ff8d` -> `#8FD7FF` (осветлённая версия нового акцента).
+- **Нейтрали переведены в холодный спектр** (убран зелёный подтон под старый акцент): `--paper` `#f4f6f3` -> `#F2F5F7`, `--line` `#d9dfdc` -> `#D6DEE4`, `--muted` `#687678` -> `#64727C`; хардкоды: `#93a3a3` -> `#93A2AC` (eyebrow), `#c6d0ce` -> `#C6CFD6` (hero p), `#a6b2b0` -> `#A6B2B8` (hero-scroll), `#4b5a5b` -> `#4B5860` (process-item), `#9eaeac` -> `#9EACB4` (process-item p, footer-top p), `#415351` -> `#414F58` (quote-section p), `#aebcba` -> `#AEBCC4` (page-intro p), `#c9d2d1` -> `#C9D2D8` (detail-hero p, back-link), `#819090` -> `#818E96` (detail-list b), `#405053` -> `#40505A` (мобильное меню), `#364648` -> `#36464F` и `#718181` -> `#717E86` (футер).
+- **Зелёные хардкоды вне плана** (найдены при вычитке): `#e6ebe7` -> `#E7ECEF` (фон split-секции), `#c8d1ce` -> `#C8D1D6` (граница check-list), `#5a7900` (оливковые галочки «✓») -> `#2A7CB8` (тёмно-голубой, читаемый на светлом фоне).
+- **index.html**: `theme-color` `#101a1d` -> `#102023` (синхронизация с `--dark`).
+- `--ink`/`--dark: #102023` не менялись — тёмный teal сочетается с небесно-голубым. Фотоассеты и шрифты не тронуты.
+
+### Контраст (WCAG)
+
+- `#67C6FF` + тёмный текст `#102023` (button.primary, marquee, quote-section) — ≈8.9:1 ✅
+- `#67C6FF` как текст/hover на тёмном фоне — ≈8.9:1 ✅
+- `#414F58` на `#67C6FF` (quote-section p) — ≈4.8:1 ✅ (порог AA 4.5:1)
+
+### Проверка этапа
+
+- `npm run build` — успешно (30 модулей, CSS 13.36 КБ, JS gzip 79.21 КБ).
+- Grep-аудит: `#d5f25c`, `#e6ff8d`, `#5a7900` и зеленоватые хардкоды отсутствуют; новые значения на месте.
+- Smoke-тест `vite preview`: `/`, `/ru/`, `/en/services`, `/az/service/vehicles`, `/ru/contact`, `/ru/gallery`, `/ru/faq`, `/en/service/usa-transport` — HTTP 200.
+
+## 2026-10-30 — ребрендинг Savannah Cargo, фирменная палитра, пересборка главной, продакшен-пакет
+
+### Что сделано
+
+- **Ребрендинг**: Northline -> **Savannah Cargo** (бренд в `trustEyebrow` RU/EN/AZ, футер `© 2026 Savannah Cargo`, email `hello@northline.example` -> `info@savannah-cargo.com` — предположение по домену, требует подтверждения). Домен проекта: `savannah-cargo.com`.
+- **Логотипы** (7 PNG из `take/лого/`, сконвертированы в `src/assets/brand/` + `public/`): wordmark -> шапка; main-horizontal -> футер + og-cover; round-emblem -> медальон в trust-секции и 404; global-vehicle -> About; globe-road -> декор hero-панели; app-icon-square -> favicon.ico/16/32/48/apple-touch 180; app-icon-round -> icon-512. Все PNG без альфа-канала (кремовый фон) — логотипы размещены на светлых «чипах».
+- **Фирменная палитра из пикселей логотипов** (сэмплирование): кремовый `#F5EAD5`, тёмно-зелёный `#15332A`, терракота `#BC481E`. Заменены `--paper/--ink/--dark/--line/--muted/--accent` + `--paper-deep`, `--accent-light` (на тёмном), `--accent-hover`. Все зеленовато-серые хардкоды предыдущих этапов заменены на тёплые/фирменные.
+- **Главная пересборка** (концепция «маршрут»): hero двухзонный 7/5 с панелью «Маршрут» (США → Грузия → 19 стран) и фактами (06 услуг / 03 языка / 19 направлений) вместо полупустого центра; услуги — нумерованные строки 01–06 с hover-раскрытием и миниатюрами вместо одинаковых карточек 3×2; процесс — горизонтальный маршрут с пунктиром и точками-этапами (сквозной мотив); trust — асимметричный split с overlap-медальоном round-emblem; галерея — плотная мозаика 5 фото (2 крупных + 3) вместо рыхлой тройки; CTA-форма компактным акцентным блоком. Убраны крупные пустоты: чередование фонов (тёмный → терракота → крем), плотные сетки.
+- **Страницы**: Контакты — полноценная (карта Google Maps embed по адресу, кликабельные tel:/mailto:, WhatsApp `wa.me/19126311187` — **без Telegram** и **без часов работы** по требованию, форма); About (медальона-эмблема нет, логотип global-vehicle + чек-лист + процесс); Services/ServicePage (компоновка сохранена, + CTA); Gallery — **лайтбокс** (prev/next, Esc/стрелки, aria); FAQ + CTA внизу; **404-страница** (эмблема + тексты RU/EN/AZ, `notFound*` в `data.js`) — неизвестные пути больше не рендерят Home молча.
+- **Продакшен-пакет**: favicon-сет (ico 48 + png 16/32/48 + apple-touch 180 + icon-512), meta description, **Open Graph** (`og:type/site_name/locale(+alternate)/title/description/url/image 1200×630`, `og-cover.jpg` собран из main-horizontal на кремовом поле с таглайном), `twitter:card summary_large_image`, canonical `https://savannah-cargo.com/...`, динамические title/description/og/canonical по маршруту и локали (useEffect в `App`), `robots.txt` + `sitemap.xml` (36 URL = 12 маршрутов × 3 локали), alt/aria.
+- **Фото услуги 02** заменено: `take/Оранжевые стеллажи автозапчастей.png` (3 МБ) -> `src/assets/services/dismantling-orange-racks.jpg` (JPEG q85, 1586×992). Старый `dismantling-parts.jpg` удалён. `take/` удалена как отработанный материал.
+
+### Проверка этапа
+
+- `npm run build` — успешно (35 модулей, CSS 19.18 КБ, JS gzip 81.25 КБ); все 5 логотипов + og-cover в сборке.
+- Grep-аудит: «Northline», старые цвета и `dismantling-parts` отсутствуют в исходниках (только в архивных записях WORK_LOG).
+- Smoke-тест `vite preview`: `/`, `/ru/`, `/en/services`, `/az/service/vehicles`, `/ru/contact`, `/ru/gallery`, `/ru/faq`, `/en/service/usa-transport`, `/az/about`, `/ru/nonexistent-page` + `/favicon.ico`, `/robots.txt`, `/sitemap.xml`, `/og-cover.jpg` — HTTP 200.
+- Контраст: акцент `#BC481E` + белый текст ≈5.0:1 ✅; `#E8915F` на `#15332A` ≈5.6:1 ✅; кремовый на тёмно-зелёном ≈11:1 ✅.
