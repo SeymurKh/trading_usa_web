@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { contacts, copy, gallery, locales, services } from './data';
-import logoWordmark from './assets/brand/logo-wordmark.png';
-import logoHorizontal from './assets/brand/logo-horizontal.png';
-import logoEmblem from './assets/brand/logo-emblem.png';
-import logoVehicle from './assets/brand/logo-vehicle.png';
-import logoGlobeRoad from './assets/brand/logo-globe-road.png';
+import { copy, gallery, locales, services } from './data';
+import logoSign from './assets/brand/logo-sign.png';
+import logoEmblemHauler from './assets/brand/logo-emblem-hauler.png';
+import logoBadge from './assets/brand/logo-badge.png';
+import logoLockup from './assets/brand/logo-lockup.png';
+import warehousePanels from './assets/gallery/warehouse-packed-panels.jpg';
 import './styles.css';
 
 const SITE_URL = 'https://savannah-cargo.com';
@@ -92,7 +92,7 @@ function App() {
   };
 
   return <>
-    <Header t={t} locale={locale} changeLocale={changeLocale} navigate={navigate} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+    <Header t={t} locale={locale} changeLocale={changeLocale} navigate={navigate} menuOpen={menuOpen} setMenuOpen={setMenuOpen} solid={view === 'contact'} />
     {view === 'service' ? <ServicePage t={t} locale={locale} service={service} navigate={navigate} />
       : view === 'services' ? <ServicesPage t={t} locale={locale} navigate={navigate} />
       : view === 'about' ? <AboutPage t={t} locale={locale} navigate={navigate} />
@@ -105,14 +105,14 @@ function App() {
   </>;
 }
 
-function Header({ t, locale, changeLocale, navigate, menuOpen, setMenuOpen }) {
-  return <header className="header"><div className="container nav-wrap"><button className="brand" onClick={() => navigate('/')} aria-label="Savannah Cargo"><img src={logoWordmark} alt="Savannah Cargo" /></button><button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu"><span /><span /></button><nav className={menuOpen ? 'nav open' : 'nav'}>{Object.entries(t.nav).map(([key, label]) => <button key={key} onClick={() => navigate(key === 'home' ? '/' : `/${key}`)}>{label}</button>)}<div className="languages">{locales.map((item) => <button className={locale === item ? 'active' : ''} key={item} onClick={() => changeLocale(item)}>{item.toUpperCase()}</button>)}</div><button className="nav-cta" onClick={() => navigate('/contact')}>{t.primaryCta} <span>↗</span></button></nav></div></header>;
+function Header({ t, locale, changeLocale, navigate, menuOpen, setMenuOpen, solid }) {
+  return <header className={solid ? 'header solid' : 'header'}><div className="container nav-wrap"><button className="brand" onClick={() => navigate('/')} aria-label="Savannah Cargo"><img src={logoSign} alt="Savannah Cargo" /></button><button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu"><span /><span /></button><nav className={menuOpen ? 'nav open' : 'nav'}>{Object.entries(t.nav).map(([key, label]) => <button key={key} onClick={() => navigate(key === 'home' ? '/' : `/${key}`)}>{label}</button>)}<div className="languages">{locales.map((item) => <button className={locale === item ? 'active' : ''} key={item} onClick={() => changeLocale(item)}>{item.toUpperCase()}</button>)}</div><button className="nav-cta" onClick={() => navigate('/contact')}>{t.primaryCta} <span>↗</span></button></nav></div></header>;
 }
 
 function Hero({ t, navigate }) {
   return <section className="hero"><div className="hero-image" /><div className="container hero-grid">
-    <div className="hero-content"><div className="eyebrow">{t.heroEyebrow}</div><h1>{t.heroTitle.split('\n').map((line, i) => <React.Fragment key={line}>{i > 0 && <br />}{line}</React.Fragment>)}</h1><p>{t.heroText}</p><div className="hero-actions"><button className="button primary" onClick={() => navigate('/contact')}>{t.primaryCta} <span>↗</span></button><button className="text-button" onClick={() => navigate('/services')}>{t.secondaryCta} <span>→</span></button></div></div>
-    <aside className="hero-panel"><div className="hero-panel-label"><img src={logoGlobeRoad} alt="" aria-hidden="true" />{t.heroRouteLabel}</div><div className="hero-route">{t.heroRoute.map((node, i) => <React.Fragment key={node}><span className="route-node">{node}</span>{i < t.heroRoute.length - 1 ? <span className="route-arrow" aria-hidden="true">→</span> : null}</React.Fragment>)}</div><div className="hero-facts">{t.heroFacts.map((fact) => <div className="hero-fact" key={fact.label}><b>{fact.value}</b><span>{fact.label}</span></div>)}</div></aside>
+    <div className="hero-content"><h1>{t.heroTitle.split('\n').map((line, i) => <React.Fragment key={line}>{i > 0 && <br />}{line}</React.Fragment>)}</h1><p>{t.heroText}</p><div className="hero-actions"><button className="button primary" onClick={() => navigate('/contact')}>{t.primaryCta} <span>↗</span></button><button className="text-button" onClick={() => navigate('/services')}>{t.secondaryCta} <span>→</span></button></div></div>
+    <div className="hero-brand"><img src={logoEmblemHauler} alt="Savannah Cargo" /></div>
   </div><div className="hero-scroll">SCROLL <span>↓</span></div></section>;
 }
 
@@ -136,8 +136,9 @@ function Process({ t }) {
 
 function TrustSection({ t, navigate }) {
   return <section className="trust-section" data-reveal><div className="container trust-grid">
-    <div className="trust-media"><div className="trust-photo" /><img className="trust-emblem" src={logoEmblem} alt="Savannah Cargo — Global Vehicle Logistics" /></div>
-    <div className="trust-copy"><div className="eyebrow">{t.trustEyebrow}</div><h2>{t.trustTitle}</h2><p>{t.trustText}</p><div className="check-list">{t.trustPoints.map((item) => <div key={item}><span>✓</span>{item}</div>)}</div><button className="text-button" onClick={() => navigate('/about')}>{t.nav.about} <span>→</span></button></div>
+    <div className="trust-media"><div className="trust-photo" style={{ backgroundImage: `url(${warehousePanels})` }} /><img className="trust-badge" src={logoBadge} alt="Savannah Cargo — Global Vehicle Logistics" /></div>
+    <div className="trust-copy"><div className="eyebrow">{t.trustEyebrow}</div><h2>{t.trustTitle}</h2><p>{t.trustText}</p><div className="check-list">{t.trustPoints.map((item) => <div key={item}><span>✓</span>{item}</div>)}</div>
+      <button className="text-button" onClick={() => navigate('/about')}>{t.nav.about} <span>→</span></button></div>
   </div></section>;
 }
 
@@ -158,13 +159,13 @@ function Home({ t, locale, navigate }) {
 function ServicesPage({ t, locale, navigate }) { return <PageIntro eyebrow={t.servicesEyebrow} title={t.servicesTitle} text={t.servicesText}><div className="container service-page-grid">{services.map((service) => <ServiceCard key={service.id} service={service} locale={locale} t={t} navigate={navigate} />)}</div><QuoteSection t={t} /></PageIntro>; }
 function ServiceCard({ service, locale, t, navigate }) { return <a className="service-card" href={`/${locale}/service/${service.id}`} onClick={(e) => { e.preventDefault(); navigate(`/service/${service.id}`); }}><div className="card-image" style={{ backgroundImage: `url(${service.image})` }}><span>{service.icon}</span></div><div className="card-content"><h3>{service.title[locale]}</h3><p>{service.text[locale]}</p><span className="arrow-link">{t.details} <span>↗</span></span></div></a>; }
 
-function ServicePage({ t, locale, service, navigate }) { return <main><section className="detail-hero" style={{ backgroundImage: `linear-gradient(90deg, rgba(21,51,42,.9), rgba(21,51,42,.35)), url(${service.image})` }}><div className="container"><button className="back-link" onClick={() => navigate('/services')}>← {t.back}</button><div className="eyebrow">{service.icon} / {t.nav.services}</div><h1>{service.title[locale]}</h1><p>{service.text[locale]}</p></div></section><section className="detail-content"><div><div className="eyebrow">{t.processEyebrow}</div><h2>{t.trustTitle}</h2><p>{t.trustText}</p></div><div className="detail-list">{t.trustPoints.map((point, i) => <div key={point}><b>0{i + 1}</b><span>{point}</span></div>)}</div></section><QuoteSection t={t} /></main>; }
+function ServicePage({ t, locale, service, navigate }) { return <main><section className="detail-hero" style={{ backgroundImage: `linear-gradient(90deg, rgba(21,51,42,.9), rgba(21,51,42,.35)), url(${service.image})` }}><div className="container"><button className="back-link" onClick={() => navigate('/services')}>← {t.back}</button><h1>{service.title[locale]}</h1><p>{service.text[locale]}</p></div></section><section className="detail-content"><div><div className="eyebrow">{t.processEyebrow}</div><h2>{t.trustTitle}</h2><p>{t.trustText}</p></div><div className="detail-list">{t.trustPoints.map((point, i) => <div key={point}><b>0{i + 1}</b><span>{point}</span></div>)}</div></section><QuoteSection t={t} /></main>; }
 
 function PageIntro({ eyebrow, title, text, children }) { return <main><section className="page-intro"><div className="container">{eyebrow ? <div className="eyebrow">{eyebrow}</div> : null}<h1>{title}</h1>{text ? <p>{text}</p> : null}</div></section>{children}</main>; }
 
 function AboutPage({ t, navigate }) {
   return <PageIntro eyebrow={t.trustEyebrow} title={t.trustTitle} text={t.trustText}><section className="about-body"><div className="container about-grid">
-    <div className="about-media"><img src={logoVehicle} alt="Savannah Cargo — Global Vehicle Logistics" /></div>
+    <div className="about-media"><img src={logoLockup} alt="Savannah Cargo — Global Vehicle Logistics" /></div>
     <div className="check-list">{t.trustPoints.map((item) => <div key={item}><span>✓</span>{item}</div>)}</div>
   </div><Process t={t} /><QuoteSection t={t} /></section></PageIntro>;
 }
@@ -189,26 +190,18 @@ function GalleryPage({ t }) {
 function FaqPage({ t }) { return <PageIntro eyebrow="FAQ" title={t.faqTitle} text={t.faqText}><div className="container faq-list">{t.faq.map((item, i) => <details key={item.q} {...(i === 0 ? { open: true } : {})}><summary>{item.q}<span>+</span></summary><p>{item.a}</p></details>)}</div><QuoteSection t={t} /></PageIntro>; }
 
 function ContactPage({ t }) {
-  return <main><section className="contact-page"><div className="container contact-head"><div className="eyebrow">{t.nav.contacts}</div><h1>{t.contactTitle}</h1><p>{t.quoteText}</p></div>
-    <div className="container contact-grid">
-      <div className="contact-cards">
-        <a className="contact-card" href={`tel:${contacts.phone.replace(/[^+\d]/g, '')}`}><span>PHONE</span><strong>{contacts.phone}</strong></a>
-        <a className="contact-card" href={`mailto:${contacts.email}`}><span>EMAIL</span><strong>{contacts.email}</strong></a>
-        <a className="contact-card" href={`https://wa.me/${contacts.whatsapp}`} target="_blank" rel="noopener noreferrer"><span>WHATSAPP</span><strong>{t.whatsappLabel} ↗</strong></a>
-        <div className="contact-card"><span>OFFICE</span><strong>{contacts.address}</strong></div>
-      </div>
-      <LeadForm t={t} />
-    </div>
-    <div className="container contact-map-wrap"><h2>{t.mapLabel}</h2><iframe className="contact-map" title={t.mapLabel} src="https://maps.google.com/maps?q=176+Waverly+Way,+Savannah,+GA+31407&z=15&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen /></div>
-  </section></main>;
+  return <main><section className="contact-page"><div className="container contact-grid">
+    <div className="contact-head"><div className="eyebrow">{t.quoteEyebrow}</div><h1>{t.contactTitle}</h1><p>{t.quoteText}</p></div>
+    <LeadForm t={t} />
+  </div></section></main>;
 }
 
 function NotFoundPage({ t, navigate }) {
-  return <main><section className="notfound-page"><div className="container notfound-inner"><img src={logoEmblem} alt="Savannah Cargo" /><h1>{t.notFoundTitle}</h1><p>{t.notFoundText}</p><button className="button primary" onClick={() => navigate('/')}>{t.notFoundCta} <span>↗</span></button></div></section></main>;
+  return <main><section className="notfound-page"><div className="container notfound-inner"><img src={logoEmblemHauler} alt="Savannah Cargo" /><h1>{t.notFoundTitle}</h1><p>{t.notFoundText}</p><button className="button primary" onClick={() => navigate('/')}>{t.notFoundCta} <span>↗</span></button></div></section></main>;
 }
 
 function Footer({ t, locale, navigate }) {
-  return <footer><div className="container footer-top"><div className="footer-brand"><button className="brand" onClick={() => navigate('/')} aria-label="Savannah Cargo"><img src={logoHorizontal} alt="Savannah Cargo" /></button><p>{t.footerText}</p></div><button className="button outline" onClick={() => navigate('/contact')}>{t.primaryCta} <span>↗</span></button></div><div className="container footer-bottom"><span>© 2026 Savannah Cargo</span><div>{Object.entries(t.nav).slice(1, 5).map(([key, label]) => <button key={key} onClick={() => navigate(`/${key}`)}>{label}</button>)}</div><span>{locale.toUpperCase()} / PRIVACY</span></div></footer>;
+  return <footer><div className="container footer-top"><button className="brand" onClick={() => navigate('/')} aria-label="Savannah Cargo"><img src={logoSign} alt="Savannah Cargo" /></button><nav className="footer-nav">{Object.entries(t.nav).slice(1).map(([key, label]) => <button key={key} onClick={() => navigate(`/${key}`)}>{label}</button>)}</nav><button className="button outline" onClick={() => navigate('/contact')}>{t.primaryCta} <span>↗</span></button></div><div className="container footer-bottom"><span>© 2026 Savannah Cargo</span><span>{locale.toUpperCase()}</span></div></footer>;
 }
 
 createRoot(document.getElementById('root')).render(<App />);
