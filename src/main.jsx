@@ -10,6 +10,8 @@ import './styles.css';
 
 const SITE_URL = 'https://savannah-cargo.com';
 
+const scrollTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
 const localeFromPath = () => {
   const part = window.location.pathname.split('/').filter(Boolean)[0];
   return locales.includes(part) ? part : 'en';
@@ -33,7 +35,7 @@ function App() {
   const view = page.key === 'service' && !service ? 'notFound' : page.key;
 
   useEffect(() => {
-    const onPop = () => { setPath(window.location.pathname); setMenuOpen(false); };
+    const onPop = () => { setPath(window.location.pathname); setMenuOpen(false); scrollTop(); };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
   }, []);
@@ -96,11 +98,11 @@ function App() {
   const navigate = (to) => {
     const target = to.startsWith('/') ? `/${locale}${to}` : `/${locale}`;
     window.history.pushState({}, '', target);
-    setPath(target); setMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' });
+    setPath(target); setMenuOpen(false); scrollTop();
   };
   const changeLocale = (next) => {
     const suffix = path.replace(/^\/(ru|en|az)/, '') || '/';
-    window.history.pushState({}, '', `/${next}${suffix}`); setLocale(next); setPath(`/${next}${suffix}`);
+    window.history.pushState({}, '', `/${next}${suffix}`); setLocale(next); setPath(`/${next}${suffix}`); scrollTop();
   };
 
   return <>
