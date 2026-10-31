@@ -265,3 +265,17 @@
 - `npm run build` — успешно (JS 256.40 kB / 80.34 gzip).
 - Замеры: 15/15 стрелок обёрнуты в `\uFE0E`, 0 сырых символов, 0 стрелок внутри строковых литералов; CSS-фиксы применены 5/5.
 - Smoke-тест `vite preview`: 13 маршрутов — HTTP 200.
+
+## 2026-10-31 — Фото для секции «Почему Savannah Cargo»
+
+### Что сделано
+
+- **Фото секции заменено**: из `take/16489.jpg` (JPEG, 1600×900, 155 КБ — уже в конвенции проекта, без пережатия) создан ассет `src/assets/sections/trust-photo.jpg` (новая папка `sections/` — фон секции, не элемент галереи/услуг). В `TrustSection` (`main.jsx`) фон `.trust-photo` подключён из него (`trustPhoto`, inline `backgroundImage`); прежний импорт `warehousePanels` в `main.jsx` удалён как мёртвый. `warehouse-packed-panels.jpg` остаётся в проекте как 8-й элемент галереи (по договорённости — галерея не тронута).
+- Вёрстка секции, бейдж `logo-badge`, адаптив не менялись (`.trust-photo { background-size: cover }` корректно кадрирует 16:9 под контейнер 560/360px).
+- Чистка: `take/` удалена как отработанный материал.
+
+### Проверка этапа
+
+- `npm run build` — успешно (JS 256.44 kB / 80.35 gzip).
+- Grep-аудит: в `main.jsx` `warehousePanels` не используется, `trustPhoto` подключён; в `data.js` `warehousePanels` — только элемент галереи.
+- Smoke-тест `vite preview`: 13 маршрутов — HTTP 200.

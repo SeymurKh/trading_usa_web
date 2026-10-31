@@ -5,7 +5,7 @@ import logoSign from './assets/brand/logo-sign.png';
 import logoEmblemHauler from './assets/brand/logo-emblem-hauler.png';
 import logoBadge from './assets/brand/logo-badge.png';
 import logoLockup from './assets/brand/logo-lockup.png';
-import warehousePanels from './assets/gallery/warehouse-packed-panels.jpg';
+import trustPhoto from './assets/sections/trust-photo.jpg';
 import './styles.css';
 
 const SITE_URL = 'https://savannah-cargo.com';
@@ -136,7 +136,7 @@ function Process({ t }) {
 
 function TrustSection({ t, navigate }) {
   return <section className="trust-section" data-reveal><div className="container trust-grid">
-    <div className="trust-media"><div className="trust-photo" style={{ backgroundImage: `url(${warehousePanels})` }} /><img className="trust-badge" src={logoBadge} alt="Savannah Cargo — Global Vehicle Logistics" /></div>
+    <div className="trust-media"><div className="trust-photo" style={{ backgroundImage: `url(${trustPhoto})` }} /><img className="trust-badge" src={logoBadge} alt="Savannah Cargo — Global Vehicle Logistics" /></div>
     <div className="trust-copy"><div className="eyebrow">{t.trustEyebrow}</div><h2>{t.trustTitle}</h2><p>{t.trustText}</p><div className="check-list">{t.trustPoints.map((item) => <div key={item}><span>✓</span>{item}</div>)}</div>
       <button className="text-button" onClick={() => navigate('/about')}>{t.nav.about} <span>{'\u2192\uFE0E'}</span></button></div>
   </div></section>;
