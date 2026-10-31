@@ -12,7 +12,7 @@ import imgContainer from './assets/services/container-consolidation.jpg';
 import imgPartsExpress from './assets/services/parts-express.jpg';
 import imgPartsMethods from './assets/services/international-cargo.jpg';
 import imgUsaTransport from './assets/services/usa-transport-ram.jpg';
-export const locales = ['ru', 'en', 'az'];
+export const locales = ['en', 'ru', 'az'];
 
 export const copy = {
   ru: {

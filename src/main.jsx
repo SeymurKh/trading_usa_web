@@ -12,7 +12,7 @@ const SITE_URL = 'https://savannah-cargo.com';
 
 const localeFromPath = () => {
   const part = window.location.pathname.split('/').filter(Boolean)[0];
-  return locales.includes(part) ? part : 'ru';
+  return locales.includes(part) ? part : 'en';
 };
 
 const pageOf = (path) => {
@@ -36,6 +36,16 @@ function App() {
     const onPop = () => { setPath(window.location.pathname); setMenuOpen(false); };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  useEffect(() => {
+    const seg = window.location.pathname.split('/').filter(Boolean)[0];
+    if (!locales.includes(seg)) {
+      const clean = window.location.pathname.replace(/\/+$/, '');
+      const target = clean ? `/en${clean}` : '/en';
+      window.history.replaceState({}, '', target);
+      setPath(target);
+    }
   }, []);
 
   useEffect(() => {

@@ -337,3 +337,19 @@
 - `npm run build` — успешно (JS 258.94 kB / 81.06 gzip).
 - Smoke-тест `vite preview`: 16 маршрутов — HTTP 200.
 - Grep-аудит: `quoteEyebrow|Начнём с вашей задачи|Let’s start with your brief|Tapşırığınızla başlayaq` в `src/` — 0 (только история WORK_LOG); `heroTitle` — 3 локали с новыми слоганами.
+## 2026-10-31 — Английский как базовый язык сайта
+
+### Что сделано
+
+- **Дефолтный язык — EN** (по решению заказчика: сайт открывается на английском, пока пользователь сам не сменит язык; выбор живёт только в URL, без localStorage и автоопределения по браузеру):
+  - `main.jsx`, `localeFromPath()`: фолбэк `'ru'` -> `'en'` — корень `/` и любые безпрефиксные адреса открываются на английском.
+  - `main.jsx`, новый одноразовый эффект в `App`: безпрефиксный URL нормализуется через `history.replaceState` на `/en...` (`/` -> `/en`, `/services` -> `/en/services`) — единая URL-схема «всё с языковым префиксом», без дублей контента по двум адресам (раньше `/` и `/ru/` отдавали один RU-контент). Выбор языка сохраняется в URL при навигации (`/ru/...`, `/az/...` работают как раньше).
+  - `data.js`: порядок `locales` -> `['en', 'ru', 'az']` — EN первым в переключателе языков.
+- **`index.html`** — статичная оболочка на EN (видна краулерам и до загрузки JS): `lang="en"`, title «Vehicle and parts delivery from the USA — Savannah Cargo», description/OG/Twitter на EN (тексты — из существующих `seoHome`/`seoHomeDesc`, без новых формулировок); `og:locale` -> `en_US` (alternate: ru_RU, az_AZ).
+- Динамический `document.documentElement.lang`, `og:locale` и title/description по маршрутам переключаются на лету — правок не потребовалось.
+
+### Проверка этапа
+
+- `npm run build` — успешно (JS 259.16 kB / 81.10 gzip); в `dist/index.html` — `lang="en"`, EN title, `og:locale=en_US`.
+- Smoke-тест `vite preview`: 16 маршрутов (включая `/`, `/services`, `/quote`, `/contacts`) — HTTP 200.
+- Контроль исходников: фолбэк `? part : 'en'` и `locales = ['en', 'ru', 'az']` на месте.
