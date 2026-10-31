@@ -19,7 +19,7 @@ const pageOf = (path) => {
   const clean = (path.replace(/^\/(ru|en|az)(?=\/|$)/, '') || '/').replace(/\/+$/, '') || '/';
   const serviceMatch = clean.match(/^\/service\/([^/]+)$/);
   if (serviceMatch) return { key: 'service', id: serviceMatch[1] };
-  const map = { '/': 'home', '/services': 'services', '/about': 'about', '/gallery': 'gallery', '/faq': 'faq', '/contact': 'contacts', '/quote': 'quote' };
+  const map = { '/': 'home', '/services': 'services', '/about': 'about', '/gallery': 'gallery', '/faq': 'faq', '/contact': 'contacts', '/contacts': 'contacts', '/quote': 'quote' };
   return { key: map[clean] || 'notFound' };
 };
 
@@ -68,7 +68,8 @@ function App() {
     else if (view === 'contacts') { title = `${t.nav.contacts} — Savannah Cargo`; desc = t.contactsText; }
     else if (view === 'quote') { title = `${t.contactTitle} — Savannah Cargo`; desc = t.quoteText; }
     else if (view === 'notFound') { title = `${t.notFoundTitle} — Savannah Cargo`; desc = t.notFoundText; }
-    const url = `${SITE_URL}${path === '/' ? '/' : path}`;
+    const canon = view === 'contacts' ? path.replace(/\/contact\/?$/, '/contacts') : path;
+    const url = `${SITE_URL}${canon === '/' ? '/' : canon}`;
     document.title = title;
     meta('meta[name="description"]', desc);
     meta('meta[property="og:title"]', title);
@@ -93,7 +94,7 @@ function App() {
   };
 
   return <>
-    <Header t={t} locale={locale} changeLocale={changeLocale} navigate={navigate} menuOpen={menuOpen} setMenuOpen={setMenuOpen} solid={view === 'quote'} />
+    <Header t={t} locale={locale} changeLocale={changeLocale} navigate={navigate} menuOpen={menuOpen} setMenuOpen={setMenuOpen} solid={view === 'quote' || view === 'contacts' || view === 'notFound'} />
     {view === 'service' ? <ServicePage t={t} locale={locale} service={service} navigate={navigate} />
       : view === 'services' ? <ServicesPage t={t} locale={locale} navigate={navigate} />
       : view === 'about' ? <AboutPage t={t} locale={locale} navigate={navigate} />
@@ -150,7 +151,7 @@ function GalleryMosaic({ t, navigate }) {
   </div></section>;
 }
 
-function QuoteSection({ t }) { return <section className="quote-section" data-reveal><div className="container quote-grid"><div><div className="eyebrow">{t.quoteEyebrow}</div><h2>{t.quoteTitle}</h2><p>{t.quoteText}</p></div><LeadForm t={t} /></div></section>; }
+function QuoteSection({ t }) { return <section className="quote-section" data-reveal><div className="container quote-grid"><div><h2>{t.quoteTitle}</h2><p>{t.quoteText}</p></div><LeadForm t={t} /></div></section>; }
 
 function LeadForm({ t }) { const [sent, setSent] = useState(false); const submit = (e) => { e.preventDefault(); setSent(true); }; if (sent) return <div className="form-success"><span>✓</span><p>{t.form.success}</p></div>; return <form className="lead-form" onSubmit={submit}><input required placeholder={t.form.name} /><input required placeholder={t.form.contact} /><input placeholder={t.form.cargo} /><textarea placeholder={t.form.message} rows="3" /><button className="button primary" type="submit">{t.form.send} <span>{'\u2197\uFE0E'}</span></button></form>; }
 
@@ -206,7 +207,7 @@ function ContactsPage({ t, navigate }) {
 
 function QuotePage({ t }) {
   return <main><section className="contact-page"><div className="container contact-grid">
-    <div className="contact-head"><div className="eyebrow">{t.quoteEyebrow}</div><h1>{t.contactTitle}</h1><p>{t.quoteText}</p></div>
+    <div className="contact-head"><h1>{t.contactTitle}</h1><p>{t.quoteText}</p></div>
     <LeadForm t={t} />
   </div></section></main>;
 }

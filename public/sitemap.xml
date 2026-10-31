@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://savannah-cargo.com/ru/</loc>
@@ -26,7 +26,7 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://savannah-cargo.com/ru/contact/</loc>
+    <loc>https://savannah-cargo.com/ru/contacts/</loc>
     <lastmod>2026-10-31</lastmod>
     <changefreq>monthly</changefreq>
   </url>
@@ -86,7 +86,7 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://savannah-cargo.com/en/contact/</loc>
+    <loc>https://savannah-cargo.com/en/contacts/</loc>
     <lastmod>2026-10-31</lastmod>
     <changefreq>monthly</changefreq>
   </url>
@@ -146,7 +146,7 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://savannah-cargo.com/az/contact/</loc>
+    <loc>https://savannah-cargo.com/az/contacts/</loc>
     <lastmod>2026-10-31</lastmod>
     <changefreq>monthly</changefreq>
   </url>

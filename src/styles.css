@@ -162,7 +162,6 @@ h3 { font-size: var(--fs-h3); font-weight: 600; }
 .quote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
 .quote-section h2 { max-width: 600px; }
 .quote-section p { max-width: 420px; margin-top: 25px; color: rgba(255, 255, 255, 0.88); }
-.quote-section .eyebrow { color: rgba(255, 255, 255, 0.85); }
 .lead-form { display: grid; gap: 14px; }
 .lead-form input, .lead-form textarea { border: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.5); background: transparent; padding: 15px 0; outline: 0; resize: vertical; font-size: var(--fs-body); color: var(--white); }
 .lead-form input::placeholder, .lead-form textarea::placeholder { color: rgba(255, 255, 255, 0.7); }
