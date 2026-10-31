@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { copy, gallery, locales, services } from './data';
+import { contacts, copy, gallery, locales, services } from './data';
 import logoSign from './assets/brand/logo-sign.png';
 import logoEmblemHauler from './assets/brand/logo-emblem-hauler.png';
 import logoBadge from './assets/brand/logo-badge.png';
@@ -19,7 +19,7 @@ const pageOf = (path) => {
   const clean = (path.replace(/^\/(ru|en|az)(?=\/|$)/, '') || '/').replace(/\/+$/, '') || '/';
   const serviceMatch = clean.match(/^\/service\/([^/]+)$/);
   if (serviceMatch) return { key: 'service', id: serviceMatch[1] };
-  const map = { '/': 'home', '/services': 'services', '/about': 'about', '/gallery': 'gallery', '/faq': 'faq', '/contact': 'contact' };
+  const map = { '/': 'home', '/services': 'services', '/about': 'about', '/gallery': 'gallery', '/faq': 'faq', '/contact': 'contacts', '/quote': 'quote' };
   return { key: map[clean] || 'notFound' };
 };
 
@@ -65,7 +65,8 @@ function App() {
     else if (view === 'about') { title = `${t.nav.about} — Savannah Cargo`; desc = t.trustText; }
     else if (view === 'gallery') { title = `${t.nav.gallery} — Savannah Cargo`; desc = t.galleryTitle; }
     else if (view === 'faq') { title = 'FAQ — Savannah Cargo'; desc = t.faqText; }
-    else if (view === 'contact') { title = `${t.contactTitle} — Savannah Cargo`; desc = t.quoteText; }
+    else if (view === 'contacts') { title = `${t.nav.contacts} — Savannah Cargo`; desc = t.contactsText; }
+    else if (view === 'quote') { title = `${t.contactTitle} — Savannah Cargo`; desc = t.quoteText; }
     else if (view === 'notFound') { title = `${t.notFoundTitle} — Savannah Cargo`; desc = t.notFoundText; }
     const url = `${SITE_URL}${path === '/' ? '/' : path}`;
     document.title = title;
@@ -92,13 +93,14 @@ function App() {
   };
 
   return <>
-    <Header t={t} locale={locale} changeLocale={changeLocale} navigate={navigate} menuOpen={menuOpen} setMenuOpen={setMenuOpen} solid={view === 'contact'} />
+    <Header t={t} locale={locale} changeLocale={changeLocale} navigate={navigate} menuOpen={menuOpen} setMenuOpen={setMenuOpen} solid={view === 'quote'} />
     {view === 'service' ? <ServicePage t={t} locale={locale} service={service} navigate={navigate} />
       : view === 'services' ? <ServicesPage t={t} locale={locale} navigate={navigate} />
       : view === 'about' ? <AboutPage t={t} locale={locale} navigate={navigate} />
       : view === 'gallery' ? <GalleryPage t={t} />
       : view === 'faq' ? <FaqPage t={t} />
-      : view === 'contact' ? <ContactPage t={t} />
+      : view === 'contacts' ? <ContactsPage t={t} navigate={navigate} />
+      : view === 'quote' ? <QuotePage t={t} />
       : view === 'notFound' ? <NotFoundPage t={t} navigate={navigate} />
       : <Home t={t} locale={locale} navigate={navigate} />}
     <Footer t={t} locale={locale} navigate={navigate} />
@@ -106,12 +108,12 @@ function App() {
 }
 
 function Header({ t, locale, changeLocale, navigate, menuOpen, setMenuOpen, solid }) {
-  return <header className={solid ? 'header solid' : 'header'}><div className="container nav-wrap"><button className="brand" onClick={() => navigate('/')} aria-label="Savannah Cargo"><img src={logoSign} alt="Savannah Cargo" /></button><button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu"><span /><span /></button><nav className={menuOpen ? 'nav open' : 'nav'}>{Object.entries(t.nav).map(([key, label]) => <button key={key} onClick={() => navigate(key === 'home' ? '/' : `/${key}`)}>{label}</button>)}<div className="languages">{locales.map((item) => <button className={locale === item ? 'active' : ''} key={item} onClick={() => changeLocale(item)}>{item.toUpperCase()}</button>)}</div><button className="nav-cta" onClick={() => navigate('/contact')}>{t.primaryCta} <span>{'\u2197\uFE0E'}</span></button></nav></div></header>;
+  return <header className={solid ? 'header solid' : 'header'}><div className="container nav-wrap"><button className="brand" onClick={() => navigate('/')} aria-label="Savannah Cargo"><img src={logoSign} alt="Savannah Cargo" /></button><button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu"><span /><span /></button><nav className={menuOpen ? 'nav open' : 'nav'}>{Object.entries(t.nav).map(([key, label]) => <button key={key} onClick={() => navigate(key === 'home' ? '/' : `/${key}`)}>{label}</button>)}<div className="languages">{locales.map((item) => <button className={locale === item ? 'active' : ''} key={item} onClick={() => changeLocale(item)}>{item.toUpperCase()}</button>)}</div><button className="nav-cta" onClick={() => navigate('/quote')}>{t.primaryCta} <span>{'\u2197\uFE0E'}</span></button></nav></div></header>;
 }
 
 function Hero({ t, navigate }) {
   return <section className="hero"><div className="hero-image" /><div className="container hero-grid">
-    <div className="hero-content"><h1>{t.heroTitle.split('\n').map((line, i) => <React.Fragment key={line}>{i > 0 && <br />}{line}</React.Fragment>)}</h1><p>{t.heroText}</p><div className="hero-actions"><button className="button primary" onClick={() => navigate('/contact')}>{t.primaryCta} <span>{'\u2197\uFE0E'}</span></button><button className="text-button" onClick={() => navigate('/services')}>{t.secondaryCta} <span>{'\u2192\uFE0E'}</span></button></div></div>
+    <div className="hero-content"><h1>{t.heroTitle.split('\n').map((line, i) => <React.Fragment key={line}>{i > 0 && <br />}{line}</React.Fragment>)}</h1><p>{t.heroText}</p><div className="hero-actions"><button className="button primary" onClick={() => navigate('/quote')}>{t.primaryCta} <span>{'\u2197\uFE0E'}</span></button><button className="text-button" onClick={() => navigate('/services')}>{t.secondaryCta} <span>{'\u2192\uFE0E'}</span></button></div></div>
     <div className="hero-brand"><img src={logoEmblemHauler} alt="Savannah Cargo" /></div>
   </div><div className="hero-scroll">SCROLL <span>{'\u2193\uFE0E'}</span></div></section>;
 }
@@ -189,7 +191,20 @@ function GalleryPage({ t }) {
 
 function FaqPage({ t }) { return <PageIntro eyebrow="FAQ" title={t.faqTitle} text={t.faqText}><div className="container faq-list">{t.faq.map((item, i) => <details key={item.q} {...(i === 0 ? { open: true } : {})}><summary>{item.q}<span>+</span></summary><p>{item.a}</p></details>)}</div><QuoteSection t={t} /></PageIntro>; }
 
-function ContactPage({ t }) {
+function ContactsPage({ t, navigate }) {
+  return <PageIntro title={t.nav.contacts} text={t.contactsText}><section className="contact-body">
+    <div className="container contact-cards">
+      <a className="contact-card" href={`tel:${contacts.phone.replace(/[^+\d]/g, '')}`}><span>PHONE</span><strong>{contacts.phone}</strong></a>
+      <a className="contact-card" href={`mailto:${contacts.email}`}><span>EMAIL</span><strong>{contacts.email}</strong></a>
+      <a className="contact-card" href={`https://wa.me/${contacts.whatsapp}`} target="_blank" rel="noopener noreferrer"><span>WHATSAPP</span><strong>WhatsApp {'\u2197\uFE0E'}</strong></a>
+      <div className="contact-card"><span>OFFICE</span><strong>{contacts.address}</strong></div>
+    </div>
+    <div className="container contact-map-wrap"><h2>{t.mapLabel}</h2><iframe className="contact-map" title={t.mapLabel} src="https://maps.google.com/maps?q=176+Waverly+Way,+Savannah,+GA+31407&z=15&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen /></div>
+    <div className="container contact-cta"><button className="button primary" onClick={() => navigate('/quote')}>{t.primaryCta} <span>{'\u2197\uFE0E'}</span></button></div>
+  </section></PageIntro>;
+}
+
+function QuotePage({ t }) {
   return <main><section className="contact-page"><div className="container contact-grid">
     <div className="contact-head"><div className="eyebrow">{t.quoteEyebrow}</div><h1>{t.contactTitle}</h1><p>{t.quoteText}</p></div>
     <LeadForm t={t} />
@@ -201,7 +216,7 @@ function NotFoundPage({ t, navigate }) {
 }
 
 function Footer({ t, locale, navigate }) {
-  return <footer><div className="container footer-top"><button className="brand" onClick={() => navigate('/')} aria-label="Savannah Cargo"><img src={logoSign} alt="Savannah Cargo" /></button><nav className="footer-nav">{Object.entries(t.nav).slice(1).map(([key, label]) => <button key={key} onClick={() => navigate(`/${key}`)}>{label}</button>)}</nav><button className="button outline" onClick={() => navigate('/contact')}>{t.primaryCta} <span>{'\u2197\uFE0E'}</span></button></div><div className="container footer-bottom"><span>© 2026 Savannah Cargo</span><span>{locale.toUpperCase()}</span></div></footer>;
+  return <footer><div className="container footer-top"><button className="brand" onClick={() => navigate('/')} aria-label="Savannah Cargo"><img src={logoSign} alt="Savannah Cargo" /></button><nav className="footer-nav">{Object.entries(t.nav).slice(1).map(([key, label]) => <button key={key} onClick={() => navigate(`/${key}`)}>{label}</button>)}</nav><button className="button outline" onClick={() => navigate('/quote')}>{t.primaryCta} <span>{'\u2197\uFE0E'}</span></button></div><div className="container footer-bottom"><span>© 2026 Savannah Cargo</span><div className="footer-contacts"><a href={`tel:${contacts.phone.replace(/[^+\d]/g, '')}`}>{contacts.phone}</a><a href={`mailto:${contacts.email}`}>{contacts.email}</a><a href={`https://wa.me/${contacts.whatsapp}`} target="_blank" rel="noopener noreferrer">WhatsApp</a></div><span>{locale.toUpperCase()}</span></div></footer>;
 }
 
 createRoot(document.getElementById('root')).render(<App />);

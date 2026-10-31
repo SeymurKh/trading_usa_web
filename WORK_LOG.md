@@ -279,3 +279,21 @@
 - `npm run build` — успешно (JS 256.44 kB / 80.35 gzip).
 - Grep-аудит: в `main.jsx` `warehousePanels` не используется, `trustPhoto` подключён; в `data.js` `warehousePanels` — только элемент галереи.
 - Smoke-тест `vite preview`: 13 маршрутов — HTTP 200.
+## 2026-10-31 — Возврат страницы «Контакты» + контактные данные в футере
+
+### Что сделано
+
+- **Структура страниц** (по решению заказчика: карта/WhatsApp/телефон/адрес должны быть и на отдельной странице, и частично в футере):
+  - `/contact` -> **«Контакты»** (новая `ContactsPage`): карточки PHONE/EMAIL/WHATSAPP/OFFICE (кликабельные tel:/mailto:/wa.me), Google-карта по адресу офиса, CTA-кнопка «Получить расчёт» -> `/quote`. Тёмный `PageIntro`-верх как у всех внутренних страниц.
+  - `/quote` -> **«Получить расчёт»** (`QuotePage`, бывший `ContactPage`): форма расчёта без изменений, сменила только URL. Все CTA «Получить расчёт» (шапка/hero/футер, 3 шт.) -> `/quote`.
+- **Данные** (`data.js`, RU/EN/AZ): восстановлен экспорт `contacts` (тел `+1 (912) 631-1187`, почта, WhatsApp `19126311187`, адрес — прежние значения), `nav.contacts` (Контакты/Contacts/Əlaqə — меню снова 6 пунктов), новые ключи `contactsText` (интро) и `mapLabel` (заголовок карты).
+- **Футер**: в нижнюю строку добавлены кликабельные телефон · email · WhatsApp (`.footer-contacts`) рядом с «© 2026 Savannah Cargo» и языком; на мобильных — переносы, центровка сохранена.
+- **SEO/sitemap**: title/description для `contacts` («Контакты — Savannah Cargo») и `quote`; в sitemap добавлены `/ru|en|az/quote/` (итого 39 URL).
+- Зелёная шапка (`solid`) теперь на `/quote` (форма на кремовом фоне); у «Контактов» тёмный верх — шапка видна штатно.
+
+### Проверка этапа
+
+- `npm run build` — успешно (JS 259.09 kB / 81.08 gzip).
+- Smoke-тест `vite preview`: 15 маршрутов (13 прежних + `/contact`, `/quote`) — HTTP 200.
+- Grep-аудит: `ContactPage|view === 'contact'` в `src/` — 0 (только история WORK_LOG); `navigate('/contact')` — 0 (все CTA -> `/quote`).
+- Открытые вопросы: email `info@savannah-cargo.com` — допущение, требует подтверждения.
